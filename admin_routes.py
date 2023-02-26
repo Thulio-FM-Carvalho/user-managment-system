@@ -1,9 +1,15 @@
 from flask import render_template, request, session, flash, redirect, url_for
-from flask_bcrypt import check_password_hash
+from flask_bcrypt import check_password_hash, generate_password_hash
 
 from helpers import FormLogin, FormUsuario, FormAdmin
 from main import app, db
 from models import Admins, Usuarios
+
+
+@app.route('/admin/create_account', methods=['GET'])
+def admin_create_account():
+    form = FormAdmin()
+    return render_template('admin/admin_create_account.html', form=form)
 
 
 @app.route('/admin/login', methods=['GET'])
@@ -107,7 +113,61 @@ def edit_admin(id):
     username = admin.username
     email = admin.email
 
+    session['admin_logado'] = username
+
     return render_template("admin/edit_admin_profile.html", form=form, id=id, username=username, email=email)
+
+
+@app.route('/admin/delete_admin/<int:id>')
+def delete_admin(id):
+    total_admins = Admins().query.count()
+    if total_admins > 1:
+
+        Admins().query.filter_by(id=id).delete()
+
+        if session['admin_id'] == id:
+            flash('Excluído com sucesso!', 'success')
+            session['admin_logado'] = None
+            session['admin_id'] = None
+            db.session.commit()
+            return redirect('/')
+        else:
+            flash('Excluído com sucesso!', 'success')
+            db.session.commit()
+
+            return redirect('/admin/get_all_admins')
+    else:
+        flash('Não é possível excluir. É necessário que tenha ao menos 1 administrador.', 'danger')
+        return redirect('/admin/get_all_admins')
+
+
+@app.route('/admin/delete_user/<int:id>')
+def delete_user(id):
+    flash('Usuário excluído com sucesso!', 'success')
+    Usuarios().query.filter_by(id=id).delete()
+    db.session.commit()
+    return redirect('/admin/get_all_user')
+
+
+@app.route('/add_admin', methods=['POST'])
+def add_admin():
+    form = FormAdmin(request.form)
+
+    username = form.username.data
+    email = form.email.data
+    password = form.password.data
+
+    admin = Admins().query.filter_by(email=email).first()
+    if admin:
+        flash('Endereço de email já associado a uma conta.', 'warning')
+        return redirect(url_for('admin_create_account'))
+    else:
+        hash_password = generate_password_hash(password).decode('utf-8')
+        admin = Admins(username=username, email=email, password=hash_password)
+        db.session.add(admin)
+        db.session.commit()
+        flash("Administrador cadastrado.", 'success')
+        return redirect('/admin/get_all_admins')
 
 
 @app.route('/update_admin', methods=["POST"])
@@ -143,6 +203,7 @@ def update_user():
         last_name = form.last_name.data
         username = form.username.data
         email = form.email.data
+        status = form.status.data
 
         id = request.form['id']
         user = Usuarios().query.filter_by(id=id).first()
@@ -150,6 +211,10 @@ def update_user():
         user.last_name = last_name
         user.username = username
         user.email = email
+        if status == "True":
+            user.status = 1
+        else:
+            user.status = 0
 
         db.session.add(user)
         db.session.commit()

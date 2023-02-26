@@ -117,11 +117,20 @@ table.table td i {
 
 
 </style>
-</head>
+
 {% block content %}
 {% include 'admin/navbar.html' %}
 <body>
 <div class="container">
+    {% with messages=get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category,message in messages %}
+            <div class="alert alert-{{category}}">
+                <strong>{{message}}</strong>
+            </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
     <div class="table table-responsive">
         <div class="table-wrapper">
             <div class="table-title">
@@ -132,7 +141,8 @@ table.table td i {
                     <div class="col-sm-6">
                         <div class="search-box">
                             <div class="input-group">
-                                <input type="text" id="search" class="form-control" placeholder="Pesquisar administrador">
+                                <a class="btn btn-primary" href="{{ url_for('admin_create_account') }}">Adicionar</a>
+                                <input type="text" id="search" class="form-control" placeholder="Pesquisar">
                                 <span class="input-group-addon"><i class="material-icons">&#xE8B6;</i></span>
                             </div>
                         </div>
@@ -157,10 +167,10 @@ table.table td i {
                         <td>
                             <a href="{{url_for('edit_admin', id=admin.id)}}" class="edit" title="Edit" data-toggle="tooltip"><i
                                     class="material-icons">&#xE254;</i></a>
-                            <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
+                            <a href="{{url_for('delete_admin', id=admin.id)}}" class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
                         </td>
                     </tr>
-                {% endfor %}
+                    {% endfor %}
                 </tbody>
             </table>
         </div>

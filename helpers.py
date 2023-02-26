@@ -1,6 +1,8 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, validators, SubmitField, PasswordField
+from wtforms import StringField, validators, SubmitField, PasswordField, BooleanField, RadioField
 from wtforms.validators import DataRequired, Length, EqualTo
+from wtforms import widgets
+
 
 
 class FormChangePassword(FlaskForm):
@@ -23,10 +25,13 @@ class FormUsuario(FlaskForm):
     username = StringField('Nome de usuário', [validators.data_required(), validators.length(min=1, max=50)])
     email = StringField('Email', [validators.data_required(), validators.length(min=1, max=50)])
     password = PasswordField('Senha', [validators.data_required(), validators.length(min=1, max=255)])
+    status = RadioField('Status', choices=[(True, 'Aprovado'), (False, 'Desaprovado')],
+                        widget=widgets.TableWidget(with_table_tag=True))
     login = SubmitField('Salvar')
 
 
 class FormAdmin(FlaskForm):
     username = StringField('Nome de usuário', [validators.data_required(), validators.length(min=1, max=50)])
     email = StringField('Email', [validators.data_required(), validators.length(min=1, max=50)])
+    password = PasswordField('Senha', [validators.data_required(), validators.length(min=1, max=255)])
     login = SubmitField('Salvar')

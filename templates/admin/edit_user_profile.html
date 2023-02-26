@@ -44,6 +44,10 @@
                                     {{ form.email.label(class="labels") }}
                                     {{ form.email(class="form-control") }}
                                 </div>
+                                <div class="col-md-12">
+                                    {{ form.status.label(class="labels") }}
+                                    {{ form.status() }}
+                                </div>
                                 <div class="mt-5 text-center">
                                     {{ form.login(class="btn btn-primary") }}
                                     <a class="btn btn-primary" href="{{ url_for('get_all_user') }}">Voltar</a>
