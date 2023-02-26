@@ -5,6 +5,15 @@
 <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.3.1/css/all.min.css" rel="stylesheet">
 {% block content %}
+{% with messages=get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+      {% for category,message in messages %}
+          <div class="alert alert-{{category}}">
+              <strong>{{message}}</strong>
+          </div>
+      {% endfor %}
+  {% endif %}
+{% endwith %}
 {% include 'admin/navbar.html' %}
 <body class="bg-default">
   <div class="main-content">

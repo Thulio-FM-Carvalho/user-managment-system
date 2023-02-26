@@ -141,6 +141,7 @@ table.table td i {
                     <div class="col-sm-6">
                         <div class="search-box">
                             <div class="input-group">
+                                <a class="btn btn-primary" href="{{ url_for('add_account_user', previous_page=page) }}">Adicionar</a>
                                 <input type="text" id="search" class="form-control" placeholder="Pesquisar usuário">
                                 <span class="input-group-addon"><i class="material-icons">&#xE8B6;</i></span>
                             </div>
@@ -170,8 +171,9 @@ table.table td i {
                         <td>{{user.email}}</td>
                         <td>{{user.status}}</td>
                         <td>
-                            <a href="{{url_for('edit_user', id=user.id)}}" class="edit" title="Editar" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
-                            <a href="{{url_for('delete_user', id=user.id)}}" class="delete" title="Excluir" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
+                            <input type="hidden" name="page_redirect" value="{{ page }}">
+                            <a href="{{url_for('edit_user', id=user.id, previous_page=page)}}" class="edit" title="Editar" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
+                            <a href="{{url_for('delete_user', id=user.id, previous_page=page)}}" class="delete" title="Excluir" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
                         </td>
                     </tr>
                 {% endfor %}
