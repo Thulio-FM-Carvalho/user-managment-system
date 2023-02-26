@@ -2,7 +2,7 @@ from flask import render_template, request, session, flash, redirect, url_for
 from flask_bcrypt import check_password_hash, generate_password_hash
 
 from helpers import FormLogin, FormUsuario, FormAdmin
-from main import app, db
+from app import app, db
 from models import Admins, Usuarios
 
 

@@ -1,7 +1,7 @@
 from flask import render_template, request, session, flash, redirect, url_for
 
 from helpers import FormLogin, FormUsuario, FormChangePassword
-from main import app, db
+from app import app, db
 from models import Usuarios
 from flask_bcrypt import generate_password_hash, check_password_hash
 
