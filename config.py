@@ -1,8 +1,8 @@
 import os
 
-SECRET_KEY = os.environ.get('SECRET_KEY')
-SQLALCHEMY_DATABASE_URI = os.environ.get('SQLALCHEMY_DATABASE_URI')
-HOST = os.environ.get('HOST')
-USER = os.environ.get('USER')
-PASSWORD = os.environ.get('PASSWORD')
+SECRET_KEY = os.getenv('SECRET_KEY')
+SQLALCHEMY_DATABASE_URI = os.getenv('SQLALCHEMY_DATABASE_URI')
+HOST = os.getenv('HOST')
+USER = os.getenv('USER')
+PASSWORD = os.getenv('PASSWORD')
 
